@@ -1,9 +1,9 @@
 {
   "ai": {
-    "provider": "deepseek",
-    "model": "deepseek-v4-flash",
-    "base_url": "https://api.deepseek.com",
-    "api_key_env": "DEEPSEEK_API_KEY",
+    "provider": "openai",
+    "model": "glm-5.3-flash",
+    "base_url": "https://open.bigmodel.cn/api/paas/v4",
+    "api_key_env": "GLM_API_KEY",
     "temperature": 0.3,
     "max_tokens": 8192,
     "throttle_sec": 1,
@@ -16,198 +16,150 @@
   },
   "processing": {
     "profiles_dir": "profiles",
-    "default_profile": "tech-news",
+    "default_profile": "commodities-macro",
     "profile_settings": {
-      "tech-news": {
-        "threshold": 7.0,
+      "commodities-macro": {
+        "threshold": 6.5,
         "topic_dedup": true
       },
-      "tech-blog": {
-        "threshold": 4.0,
-        "topic_dedup": false
-      },
-      "finance-news": {
-        "threshold": 7.0,
+      "us-consumer": {
+        "threshold": 6.5,
         "topic_dedup": true
       }
     }
   },
   "sources": {
-    "github": [
-      {
-        "type": "user_events",
-        "username": "karpathy",
-        "enabled": true,
-        "profile": "tech-news"
-      },
-      {
-        "type": "repo_releases",
-        "owner": "vllm-project",
-        "repo": "vllm",
-        "enabled": true,
-        "profile": "tech-news"
-      },
-      {
-        "type": "repo_releases",
-        "owner": "sgl-project",
-        "repo": "sglang",
-        "enabled": true,
-        "profile": "tech-news"
-      },
-      {
-        "type": "repo_releases",
-        "owner": "triton-lang",
-        "repo": "triton",
-        "enabled": true,
-        "profile": "tech-news"
-      }
-    ],
+    "github": [],
     "hackernews": {
-      "enabled": true,
-      "fetch_top_stories": 30,
-      "min_score": 150,
-      "profile": "tech-news"
+      "enabled": false
     },
     "rss": [
       {
-        "name": "Simon Willison",
-        "url": "https://simonwillison.net/atom/everything/",
+        "name": "ZeroHedge",
+        "url": "https://feeds.feedburner.com/zerohedge/feed",
         "enabled": true,
-        "category": "ai-tools",
-        "profile": "tech-news"
+        "category": "macro",
+        "profile": ["commodities-macro", "us-consumer"]
       },
       {
-        "name": "vLLM Blog",
-        "url": "https://vllm.ai/blog/rss.xml",
+        "name": "GoogleNews VLCC/tankers",
+        "url": "https://news.google.com/rss/search?q=VLCC%20OR%20%22tanker%20rates%22%20OR%20%22oil%20tanker%22&hl=en&gl=US&ceid=US:en",
         "enabled": true,
-        "category": "llm-inference",
-        "profile": "tech-blog",
-        "content_extractor": "trafilatura"
+        "category": "shipping"
       },
       {
-        "name": "Sean Goedecke",
-        "url": "https://www.seangoedecke.com/rss.xml",
+        "name": "GoogleNews uranium",
+        "url": "https://news.google.com/rss/search?q=uranium%20OR%20Kazatomprom%20OR%20Cameco&hl=en&gl=US&ceid=US:en",
         "enabled": true,
-        "category": "software-engineering",
-        "profile": "tech-blog",
-        "content_extractor": "trafilatura"
+        "category": "uranium"
+      },
+      {
+        "name": "GoogleNews tungsten",
+        "url": "https://news.google.com/rss/search?q=tungsten%20OR%20%22ammonium%20paratungstate%22%20OR%20%22tungsten%20prices%22&hl=en&gl=US&ceid=US:en",
+        "enabled": true,
+        "category": "tungsten"
+      },
+      {
+        "name": "GoogleNews phosphate/fertilizer",
+        "url": "https://news.google.com/rss/search?q=DAP%20OR%20phosphate%20OR%20fertilizer&hl=en&gl=US&ceid=US:en",
+        "enabled": true,
+        "category": "phosphate"
+      },
+      {
+        "name": "GoogleNews El Nino/monsoon",
+        "url": "https://news.google.com/rss/search?q=%22El%20Nino%22%20OR%20%22La%20Nina%22%20OR%20monsoon&hl=en&gl=US&ceid=US:en",
+        "enabled": true,
+        "category": "weather"
+      },
+      {
+        "name": "GoogleNews aluminum/coal",
+        "url": "https://news.google.com/rss/search?q=alumina%20OR%20%22aluminum%20smelter%22%20OR%20%22thermal%20coal%22%20OR%20%22coal%20price%22&hl=en&gl=US&ceid=US:en",
+        "enabled": true,
+        "category": "metals"
+      },
+      {
+        "name": "GoogleNews Lululemon/athleisure",
+        "url": "https://news.google.com/rss/search?q=Lululemon%20OR%20athleisure&hl=en&gl=US&ceid=US:en",
+        "enabled": true,
+        "category": "us-consumer"
+      },
+      {
+        "name": "GoogleNews US consumer data",
+        "url": "https://news.google.com/rss/search?q=%22consumer%20spending%22%20OR%20%22retail%20sales%22%20OR%20%22consumer%20confidence%22&hl=en&gl=US&ceid=US:en",
+        "enabled": true,
+        "category": "us-consumer"
       },
       {
         "name": "CNBC Finance",
         "url": "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=10000664",
         "enabled": true,
         "category": "finance",
-        "profile": "finance-news",
+        "profile": "us-consumer",
         "content_extractor": "trafilatura"
-      },
-      {
-        "name": "GitHub Trending - Daily",
-        "url": "https://mshibanami.github.io/GitHubTrendingRSS/daily/all.xml",
-        "enabled": true,
-        "category": "github-trending",
-        "profile": "tech-news"
-      },
-      {
-        "name": "Semianalysis",
-        "url": "https://newsletter.semianalysis.com/feed",
-        "enabled": true,
-        "category": "semiconductors",
-        "profile": "tech-news"
-      },
-      {
-        "name": "LWN.net",
-        "url": "https://lwn.net/headlines/full_text?key=${LWN_KEY}",
-        "enabled": true,
-        "category": "linux-kernel",
-        "profile": "tech-news"
       }
     ],
     "reddit": {
-      "enabled": true,
-      "subreddits": [
-        {
-          "subreddit": "MachineLearning",
-          "enabled": true,
-          "sort": "hot",
-          "time_filter": "day",
-          "fetch_limit": 10,
-          "min_score": 60,
-          "profile": "tech-news"
-        },
-        {
-          "subreddit": "LocalLLaMA",
-          "enabled": true,
-          "sort": "hot",
-          "time_filter": "day",
-          "fetch_limit": 10,
-          "min_score": 60,
-          "profile": "tech-news"
-        }
-      ],
-      "users": [],
-      "fetch_comments": 10
+      "enabled": false
     },
     "telegram": {
+      "enabled": false
+    },
+    "gdelt": {
       "enabled": true,
-      "channels": [
-        {
-          "channel": "zaihuapd",
-          "enabled": true,
-          "fetch_limit": 20,
-          "profile": ["tech-news", "finance-news"]
-        }
-      ]
+      "query": "\"tanker rates\" OR uranium OR tungsten OR phosphate OR fertilizer OR alumina",
+      "max_records": 75,
+      "category": "macro",
+      "profile": "commodities-macro"
+    },
+    "google_news": {
+      "enabled": true,
+      "query": "Lululemon OR athleisure OR \"retail sales\" OR \"consumer spending\" OR \"Federal Reserve\"",
+      "language": "en",
+      "country": "US",
+      "max_results": 100,
+      "category": "us-consumer",
+      "profile": "us-consumer"
     }
   },
   "collection": {
     "time_window_hours": 24
   },
   "digest": {
-    "max_items": null,
+    "max_items": 40,
     "profile_order": [
-      "tech-news",
-      "tech-blog",
-      "finance-news"
+      "commodities-macro",
+      "us-consumer"
     ],
-    "category_groups": {},
-    "default_group": "other",
-    "default_group_limit": null
-  },
-  "webhook": {
-    "enabled": true,
-    "url_env": "HORIZON_WEBHOOK_URL",
-    "delivery": "summary_and_items",
-    "overview_position": "last",
-    "platform": "feishu",
-    "layout": "collapsible",
-    "fallback_layout": "markdown",
-    "languages": [
-      "zh"
-    ],
-    "request_body": {
-      "msg_type": "interactive",
-      "card": {
-        "schema": "2.0",
-        "config": {
-          "wide_screen_mode": true
-        },
-        "header": {
-          "title": {
-            "tag": "plain_text",
-            "content": "#{message_title}"
-          },
-          "template": "blue"
-        },
-        "body": {
-          "elements": [
-            {
-              "tag": "markdown",
-              "content": "#{summary}"
-            }
-          ]
-        }
+    "category_groups": {
+      "shipping": {
+        "limit": 6,
+        "categories": ["shipping"]
+      },
+      "fertilizer": {
+        "limit": 5,
+        "categories": ["phosphate", "weather"]
+      },
+      "uranium": {
+        "limit": 5,
+        "categories": ["uranium"]
+      },
+      "tungsten": {
+        "limit": 4,
+        "categories": ["tungsten"]
+      },
+      "metals": {
+        "limit": 5,
+        "categories": ["metals"]
+      },
+      "macro-us": {
+        "limit": 8,
+        "categories": ["macro", "finance", "us-consumer"]
       }
     },
-    "headers": ""
+    "default_group": "other",
+    "default_group_limit": 5
+  },
+  "webhook": {
+    "enabled": false
   }
 }
