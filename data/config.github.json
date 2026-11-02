@@ -1,7 +1,7 @@
 {
   "ai": {
     "provider": "openai",
-    "model": "glm-5.3-flash",
+    "model": "glm-4.5-flash",
     "base_url": "https://open.bigmodel.cn/api/paas/v4",
     "api_key_env": "GLM_API_KEY",
     "temperature": 0.3,
@@ -106,7 +106,7 @@
     },
     "gdelt": {
       "enabled": true,
-      "query": "\"tanker rates\" OR uranium OR tungsten OR phosphate OR fertilizer OR alumina",
+      "query": "uranium OR tungsten OR phosphate OR alumina OR tanker",
       "max_records": 75,
       "category": "macro",
       "profile": "commodities-macro"
